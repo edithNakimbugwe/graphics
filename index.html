@@ -4,289 +4,337 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <style>
-        #canvas{
-            border: 1px solid black;
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #canvas {
+            display: block;
             background-color:#87CEEB;
         }
     </style>
     <title>HOME</title>
 </head>
 <body>
-    <canvas id="canvas" width="1000" height="730"></canvas>
+    <canvas id="canvas"></canvas>
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+        let carPosition = 200; // Start position off-screen to the right
 
-        //house walls
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fillRect(130, 250, 570, 200);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
 
-        ctx.fillRect(270, 160, 130, 90)
+        function drawScene() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        
-        //roof
-        ctx.fillStyle = '#2C2C2B';
-               ctx.beginPath();
-        ctx.moveTo(250, 160)
-        ctx.lineTo(332, 50);
-        ctx.lineTo(420, 160);
-        ctx.closePath();
-        ctx.fill();
-        
-        ctx.fillStyle = '#2C2C2B';
-        ctx.beginPath();
-        ctx.moveTo(400, 250);
-        ctx.lineTo(400, 170);
-        ctx.lineTo(600.3,170)
-        ctx.lineTo(700, 250);
-        ctx.closePath();
-        ctx.fill();
+            // Scale factor based on original 1000x730 canvas
+            const scaleX = canvas.width / 1000;
+            const scaleY = canvas.height / 730;
+            ctx.scale(scaleX, scaleY);
 
-        ctx.fillStyle = '#2C2C2B';
-        ctx.beginPath();
-        ctx.moveTo(85, 250);
-        ctx.lineTo(180, 170);
-        ctx.lineTo(270,170)
-        ctx.lineTo(270, 250);
-        ctx.closePath();
-        ctx.fill();
+            drawHouseAndLandscape();
+            drawCar();
 
-        //door
-        ctx.fillStyle = '#AFAFAF';
-        ctx.fillRect(470, 320, 200, 130);
-        ctx.fillStyle="black";
-        ctx.fillRect(568.9, 320, 2, 130);
+            // Reset the scale
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
 
-        ctx.fillStyle="black"
-        ctx.fillRect(485, 325, 80, 20)
+        function drawHouseAndLandscape() {
+            //house walls
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(130, 250, 570, 200);
+            ctx.fillRect(270, 160, 130, 90);
 
-        ctx.fillStyle="black"
-        ctx.fillRect(575, 325, 80, 20)
-
-        //left partition
-        ctx.fillStyle="#AFAFAF"
-        ctx.fillRect(420, 250, 15, 200)
-
-        // Top silver bar
-        ctx.fillStyle="#AFAFAF"
-        ctx.fillRect(100, 250, 600, 15)
-        //right partition
-        ctx.fillStyle="#AFAFAF"
-        ctx.fillRect(230, 250, 15, 200)
-
-        ctx.fillStyle="#AFAFAF"
-        ctx.fillRect(85, 250, 15, 200)
-
-        //skirting
-        ctx.fillStyle="#AFAFAF"
-        ctx.fillRect(670,450,50,10);
-
-        ctx.beginPath();
-        ctx.moveTo(85, 450);
-        ctx.lineTo(75, 460);
-        ctx.lineTo(530, 460);
-        ctx.lineTo(525, 450);
-        ctx.closePath();
-        ctx.fill();
-
-
-        //large window
-        ctx.fillStyle = 'black';
-        ctx.fillRect(260, 320, 150, 85);
-        //small window
-        ctx.fillStyle = 'black';
-        ctx.fillRect(140, 320, 80, 85);
-
-        ctx.fillRect(290, 170, 90, 40);
-
-        ctx.fillStyle = '#FFE4B5';
-        ctx.fillRect(270, 330, 40, 65);
-        ctx.fillRect(320, 330, 30, 65);
-        ctx.fillRect(145, 330, 30, 65);
-        ctx.fillRect(185, 330, 30, 65);
-        ctx.fillStyle = '#FE4B5 ';
-        ctx.fillRect(360, 330, 40, 65);
-        ctx.fillRect(300, 175, 20, 30);
-        ctx.fillRect(325, 175, 20, 30);
-        ctx.fillRect(350, 175, 20, 30);
-    
-        //compound
-        ctx.fillStyle = '#109030';
-        ctx.beginPath();
-        ctx.moveTo(0, 460);
-        ctx.lineTo(0,580);
-        ctx.lineTo(590,580);
-        ctx.lineTo(480, 460);
-        ctx.closePath();
-        ctx.fill();
-       
-        ctx.beginPath();
-        ctx.moveTo(0, 410);
-        ctx.lineTo(0,460);
-        ctx.lineTo(75,460);
-        ctx.lineTo(85,450);
-        ctx.lineTo(85,410);
-        ctx.closePath();
-        ctx.fill();
-        ctx.fillRect(100, 410, 30,40);
-        
-        ctx.beginPath();
-        ctx.moveTo(670, 460);
-        ctx.lineTo(700, 460);
-        ctx.lineTo(700, 410);
-        ctx.lineTo(1200, 410);
-        ctx.lineTo(1200, 580);
-        ctx.lineTo(800, 580);
-        ctx.closePath();
-        ctx.fill();
-
-        //Runway
-        ctx.fillStyle = '#2C2C2B';
-        ctx.fillRect(0, 580, 1000, 150)
-        
-        
-        //garage path
-        ctx.fillStyle = '#2C2C2B';
-        ctx.beginPath();
-        ctx.moveTo(470, 450);
-        ctx.lineTo(670, 450);
-        ctx.lineTo(800,580);
-        ctx.lineTo(590,580);
-        ctx.closePath();
-        ctx.fill();
-
-      
-        //sun
-        ctx.fillStyle = '#FFFF00';
-        ctx.beginPath();
-        ctx.arc(0, 0, 100, 0, 2 * Math.PI, true);
-        ctx.fill();
-
-        //CAR   
-        ctx.fillStyle = '#D3D3D3';
-        ctx.beginPath();
-        ctx.moveTo(520, 600);
-        ctx.bezierCurveTo(490, 600, 400, 600, 400, 630);
-        ctx.bezierCurveTo(390, 640, 390, 650, 390, 650);
-        ctx.bezierCurveTo(400, 670, 390, 650, 410, 670);
-        ctx.lineTo(430, 680);
-        ctx.arc(500, 679, 45, Math.PI, 0);
-        ctx.lineTo(750, 679);
-        ctx.arc(830, 679, 45, Math.PI, 0);
-        ctx.lineTo(920, 675)
-        ctx.lineTo(920, 600)
-        ctx.bezierCurveTo(920, 580, 920, 570, 920, 669);
-        ctx.bezierCurveTo(870, 580, 880, 580, 770, 530);
-        ctx.bezierCurveTo(650, 520, 650, 535, 650, 535);
-        ctx.bezierCurveTo(600, 560, 650, 535, 520, 600);    
-        ctx.closePath();
+            //roof
+            ctx.fillStyle = '#2C2C2B';
+            ctx.beginPath();
+            ctx.moveTo(250, 160);
+            ctx.lineTo(332, 50);
+            ctx.lineTo(420, 160);
+            ctx.closePath();
+            ctx.fill();
             
-        ctx.fill();
+            ctx.fillStyle = '#2C2C2B';
+            ctx.beginPath();
+            ctx.moveTo(400, 250);
+            ctx.lineTo(400, 170);
+            ctx.lineTo(600.3,170);
+            ctx.lineTo(700, 250);
+            ctx.closePath();
+            ctx.fill();
 
-       // front tires
-       ctx.beginPath();
-       ctx.arc(500, 675, 40, Math.PI, 10);
-       ctx.closePath();
-       ctx.fillStyle = 'black';
-       ctx.fill();
+            ctx.fillStyle = '#2C2C2B';
+            ctx.beginPath();
+            ctx.moveTo(85, 250);
+            ctx.lineTo(180, 170);
+            ctx.lineTo(270,170);
+            ctx.lineTo(270, 250);
+            ctx.closePath();
+            ctx.fill();
 
-       ctx.beginPath();
-       ctx.arc(500, 675, 28, Math.PI, 10);
-       ctx.closePath();
-       ctx.fillStyle = 'white';
-       ctx.fill();
+            //door
+            ctx.fillStyle = '#AFAFAF';
+            ctx.fillRect(470, 320, 200, 130);
+            ctx.fillStyle="black";
+            ctx.fillRect(568.9, 320, 2, 130);
 
-       ctx.beginPath();
-       ctx.arc(500, 675, 15, Math.PI, 10);
-       ctx.closePath();
-       ctx.fillStyle = 'black';
-       ctx.fill();
+            ctx.fillStyle="black";
+            ctx.fillRect(485, 325, 80, 20);
 
-       // back tire
-       ctx.beginPath();
-       ctx.arc(830, 675, 40, Math.PI, 10);
-       ctx.closePath();
-       ctx.fillStyle = 'black';
-       ctx.fill();
+            ctx.fillStyle="black";
+            ctx.fillRect(575, 325, 80, 20);
 
-       ctx.beginPath();
-       ctx.arc(830, 675, 28, Math.PI, 10);
-       ctx.closePath();
-       ctx.fillStyle = 'white';
-       ctx.fill();
+            //left partition
+            ctx.fillStyle="#AFAFAF";
+            ctx.fillRect(420, 250, 15, 200);
 
-       ctx.beginPath();
-       ctx.arc(830, 675, 15, Math.PI, 10);
-       ctx.closePath();
-       ctx.fillStyle = 'black';
-       ctx.fill();
-   
+            // Top silver bar
+            ctx.fillStyle="#AFAFAF";
+            ctx.fillRect(100, 250, 600, 15);
+            //right partition
+            ctx.fillStyle="#AFAFAF";
+            ctx.fillRect(230, 250, 15, 200);
 
-        //car windows
-       ctx.beginPath();
-       ctx.moveTo(540, 600);
-       ctx.bezierCurveTo(640, 540, 690, 545, 690, 540);
-       ctx.lineTo(690, 600);
-       ctx.closePath();
-       ctx.fillStyle = 'gray';
-       ctx.fill();
+            ctx.fillStyle="#AFAFAF";
+            ctx.fillRect(85, 250, 15, 200);
 
-       ctx.beginPath();
-       ctx.moveTo(700, 540);
-       ctx.bezierCurveTo(720, 540, 760, 530, 850, 600);
-       ctx.bezierCurveTo(850, 600, 835, 600, 830, 600);
-       ctx.bezierCurveTo(850, 600, 700, 600, 700, 600);
-       ctx.closePath()
-       ctx.fillStyle = 'black';
-       ctx.fill(); 
+            //skirting
+            ctx.fillStyle="#AFAFAF";
+            ctx.fillRect(670,450,50,10);
 
-       
+            ctx.beginPath();
+            ctx.moveTo(85, 450);
+            ctx.lineTo(75, 460);
+            ctx.lineTo(530, 460);
+            ctx.lineTo(525, 450);
+            ctx.closePath();
+            ctx.fill();
 
-       //tree
-       ctx.fillStyle="#8B4513"
-       ctx.beginPath();
-       ctx.moveTo(880, 230);
-       ctx.lineTo(850, 413);
-       ctx.lineTo(900, 413);
-       ctx.lineTo(885, 230);
-       ctx.closePath();
-       ctx.fill();
+            //large window
+            ctx.fillStyle = 'black';
+            ctx.fillRect(260, 320, 150, 85);
+            //small window
+            ctx.fillStyle = 'black';
+            ctx.fillRect(140, 320, 80, 85);
 
+            ctx.fillRect(290, 170, 90, 40);
 
-       //leaves
-       ctx.fillStyle="#228B22";
-       ctx.beginPath();
-       ctx.arc(884.5, 285, 60, 30, 60, true);
-       ctx.closePath();
-       ctx.fill();
+            ctx.fillStyle = '#FFE4B5';
+            ctx.fillRect(270, 330, 40, 65);
+            ctx.fillRect(320, 330, 30, 65);
+            ctx.fillRect(145, 330, 30, 65);
+            ctx.fillRect(185, 330, 30, 65);
+            ctx.fillStyle = '#FFE4B5';
+            ctx.fillRect(360, 330, 40, 65);
+            ctx.fillRect(300, 175, 20, 30);
+            ctx.fillRect(325, 175, 20, 30);
+            ctx.fillRect(350, 175, 20, 30);
+        
+            //compound
+            ctx.fillStyle = '#109030';
+            ctx.beginPath();
+            ctx.moveTo(0, 460);
+            ctx.lineTo(0,580);
+            ctx.lineTo(590,580);
+            ctx.lineTo(480, 460);
+            ctx.closePath();
+            ctx.fill();
+           
+            ctx.beginPath();
+            ctx.moveTo(0, 410);
+            ctx.lineTo(0,460);
+            ctx.lineTo(75,460);
+            ctx.lineTo(85,450);
+            ctx.lineTo(85,410);
+            ctx.closePath();
+            ctx.fill();
+            ctx.fillRect(100, 410, 30,40);
+            
+            ctx.beginPath();
+            ctx.moveTo(670, 460);
+            ctx.lineTo(700, 460);
+            ctx.lineTo(700, 410);
+            ctx.lineTo(1200, 410);
+            ctx.lineTo(1200, 580);
+            ctx.lineTo(800, 580);
+            ctx.closePath();
+            ctx.fill();
 
-       ctx.beginPath();
-       ctx.arc(885.5, 269, 60, 30, 60, true);
-       ctx.closePath();
-       ctx.fill();
+            //Runway
+            ctx.fillStyle = '#2C2C2B';
+            ctx.fillRect(0, 580, 1000, 150);
+            
+            //garage path
+            ctx.fillStyle = '#2C2C2B';
+            ctx.beginPath();
+            ctx.moveTo(470, 450);
+            ctx.lineTo(670, 450);
+            ctx.lineTo(800,580);
+            ctx.lineTo(590,580);
+            ctx.closePath();
+            ctx.fill();
 
-       ctx.beginPath();
-       ctx.arc(878.5, 254, 61, 30, 60, true);
-       ctx.closePath();
-       ctx.fill();
+            //sun
+            ctx.fillStyle = '#FFFF00';
+            ctx.beginPath();
+            ctx.arc(0, 0, 100, 0, 2 * Math.PI, true);
+            ctx.fill();
 
-       ctx.beginPath();
-       ctx.arc(895.5, 279, 50, 6.2, 61, true);
-       ctx.closePath();
-       ctx.fill();
+            //tree
+            ctx.fillStyle="#8B4513";
+            ctx.beginPath();
+            ctx.moveTo(880, 230);
+            ctx.lineTo(850, 413);
+            ctx.lineTo(900, 413);
+            ctx.lineTo(885, 230);
+            ctx.closePath();
+            ctx.fill();
 
-       ctx.beginPath();
-       ctx.arc(895.5, 261, 50, 6.1, 61, true);
-       ctx.closePath();
-       ctx.fill();
+            //leaves
+            ctx.fillStyle="#228B22";
+            ctx.beginPath();
+            ctx.arc(884.5, 285, 60, 30, 60, true);
+            ctx.closePath();
+            ctx.fill();
 
-       ctx.beginPath();
-       ctx.arc(895.5, 243, 50, 6.1, 61, true);
-       ctx.closePath();
-       ctx.fill();
+            ctx.beginPath();
+            ctx.arc(885.5, 269, 60, 30, 60, true);
+            ctx.closePath();
+            ctx.fill();
 
+            ctx.beginPath();
+            ctx.arc(878.5, 254, 61, 30, 60, true);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(895.5, 279, 50, 6.2, 61, true);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(895.5, 261, 50, 6.1, 61, true);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(895.5, 243, 50, 6.1, 61, true);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function drawCar() {
+            ctx.save();
+            ctx.translate(carPosition, 0);
+            ctx.scale(0.5, 0.5); // Make the car smaller
+
+            // Move the car down below the house
+            ctx.translate(0, 600);
+
+            // Flip the car horizontally to face left
+            ctx.scale(-1, 1);
+
+            // Car body
+            ctx.fillStyle = '#D3D3D3';
+            ctx.beginPath();
+            ctx.moveTo(520, 600);
+            ctx.bezierCurveTo(490, 600, 400, 600, 400, 630);
+            ctx.bezierCurveTo(390, 640, 390, 650, 390, 650);
+            ctx.bezierCurveTo(400, 670, 390, 650, 410, 670);
+            ctx.lineTo(430, 680);
+            ctx.arc(500, 679, 45, Math.PI, 0);
+            ctx.lineTo(750, 679);
+            ctx.arc(830, 679, 45, Math.PI, 0);
+            ctx.lineTo(920, 675);
+            ctx.lineTo(920, 600);
+            ctx.bezierCurveTo(920, 580, 920, 570, 920, 669);
+            ctx.bezierCurveTo(870, 580, 880, 580, 770, 530);
+            ctx.bezierCurveTo(650, 520, 650, 535, 650, 535);
+            ctx.bezierCurveTo(600, 560, 650, 535, 520, 600);    
+            ctx.closePath();
+            ctx.fill();
+
+            // front tires
+            ctx.beginPath();
+            ctx.arc(500, 675, 40, Math.PI, 10);
+            ctx.closePath();
+            ctx.fillStyle = 'black';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(500, 675, 28, Math.PI, 10);
+            ctx.closePath();
+            ctx.fillStyle = 'white';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(500, 675, 15, Math.PI, 10);
+            ctx.closePath();
+            ctx.fillStyle = 'black';
+            ctx.fill();
+
+            // back tire
+            ctx.beginPath();
+            ctx.arc(830, 675, 40, Math.PI, 10);
+            ctx.closePath();
+            ctx.fillStyle = 'black';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(830, 675, 28, Math.PI, 10);
+            ctx.closePath();
+            ctx.fillStyle = 'white';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(830, 675, 15, Math.PI, 10);
+            ctx.closePath();
+            ctx.fillStyle = 'black';
+            ctx.fill();
+
+            //car windows
+            ctx.beginPath();
+            ctx.moveTo(540, 600);
+            ctx.bezierCurveTo(640, 540, 690, 545, 690, 540);
+            ctx.lineTo(690, 600);
+            ctx.closePath();
+            ctx.fillStyle = 'gray';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(700, 540);
+            ctx.bezierCurveTo(720, 540, 760, 530, 850, 600);
+            ctx.bezierCurveTo(850, 600, 835, 600, 830, 600);
+            ctx.bezierCurveTo(850, 600, 700, 600, 700, 600);
+            ctx.closePath();
+            ctx.fillStyle = 'black';
+            ctx.fill(); 
+
+            ctx.restore();
+        }
+
+        function animate() {
+            carPosition += 2;
+            if (carPosition > window.innerWidth+160) {
+                carPosition = 200; // Reset position when off-screen to the left
+            }
+            drawScene();
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            drawScene();
+        });
+
+        resizeCanvas();
+        animate(); // Start the animation
     </script>
 </body>
 </html>
